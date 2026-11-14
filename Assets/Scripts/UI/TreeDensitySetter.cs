@@ -61,11 +61,43 @@ namespace YOPO.SIM.UI {
 
 
         private IEnumerator GenerateTerrain() {
+            // The three density graphs only differ in tree parameters, but Vista
+            // regenerates the whole tile and overwrites the baked heightmap.
+            // Snapshot the heights first so switching density only changes trees
+            // and the ground under the robot's spawn point stays put.
+            var heightSnapshots = new System.Collections.Generic.List<(Terrain terrain, int resolution, float[,] heights)>();
+            foreach (ITile tile in _vistaManager.GetTiles()) {
+                if (tile.gameObject.TryGetComponent(out Terrain terrain) && terrain.terrainData != null) {
+                    int resolution = terrain.terrainData.heightmapResolution;
+                    heightSnapshots.Add((terrain, resolution, terrain.terrainData.GetHeights(0, 0, resolution, resolution)));
+                }
+            }
             // Wait for the terrain to be generated
-            var generationTask = _vistaManager.ForceGenerate();
+            var generationTask = _vistaManager.Generate(_vistaManager.GetTiles());
             yield return new WaitUntil(() => generationTask.isCompleted);
+            // Restore the baked heightmaps and re-ground the newly placed trees
+            foreach (var (terrain, resolution, heights) in heightSnapshots) {
+                TerrainData terrainData = terrain.terrainData;
+                if (terrainData.heightmapResolution != resolution) {
+                    terrainData.heightmapResolution = resolution;
+                }
+                terrainData.SetHeights(0, 0, heights);
+                GroundTreesOnRestoredHeights(terrainData);
+            }
             // Refresh colliders after generation
             RefreshTerrainColliders();
+        }
+
+        private static void GroundTreesOnRestoredHeights(TerrainData terrainData) {
+            TreeInstance[] trees = terrainData.treeInstances;
+            for (int i = 0; i < trees.Length; i++) {
+                TreeInstance tree = trees[i];
+                Vector3 position = tree.position;
+                position.y = terrainData.GetInterpolatedHeight(position.x, position.z) / terrainData.size.y;
+                tree.position = position;
+                trees[i] = tree;
+            }
+            terrainData.treeInstances = trees;
         }
         private void RefreshTerrainColliders() {
             foreach (ITile tile in _vistaManager.GetTiles()) {

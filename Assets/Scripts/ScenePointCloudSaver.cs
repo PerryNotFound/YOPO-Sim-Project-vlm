@@ -36,7 +36,7 @@ namespace YOPO.SIM {
 
         IEnumerator SavePointCloud(int terrainSeed, int sceneIndex, FilePathManager filePathManager) {
             _biome.seed = terrainSeed;
-            yield return _vistaManager.ForceGenerate();
+            yield return _vistaManager.Generate(_vistaManager.GetTiles());
 
             string folderName = filePathManager.GetSceneFolderPath(sceneIndex);
             string treeFileName = filePathManager.GetTreeFileName();

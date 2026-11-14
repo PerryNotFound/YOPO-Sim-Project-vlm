@@ -104,3 +104,6 @@ Assets/ThirdParty/TextMesh Pro
 TrainingData
 TestingData
 PointCloud
+# Paid asset (Vista terrain tool) - license does not allow redistribution
+/Assets/PinwheelStudio/
+/Assets/PinwheelStudio.meta
