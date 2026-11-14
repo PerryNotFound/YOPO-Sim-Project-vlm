@@ -162,7 +162,7 @@ This project is licensed under the [Apache-2.0 License](LICENSE).
 ## Fork notes (semantic-hazard experiments)
 
 This fork extends upstream YOPO-Sim for VLM-based semantic-hazard (water) experiments,
-paired with the [yopo-vlm-sys2](../yopo-vlm-sys2) System-2 repo:
+paired with the [yopo-vlm-sys2](https://github.com/PerryNotFound/yopo-vlm-sys2) System-2 repo:
 
 - **`Assets/Scripts/PuddleRandomizer.cs`**: random puddle placement each run
   (radius-shrink retry, stable 6/6 placement; logs puddle coordinates to Console
