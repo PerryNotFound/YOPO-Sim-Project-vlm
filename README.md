@@ -157,3 +157,35 @@ If you use this package in your research or projects, please cite it as follows:
 ## License
 
 This project is licensed under the [Apache-2.0 License](LICENSE).
+---
+
+## Fork notes (semantic-hazard experiments)
+
+This fork extends upstream YOPO-Sim for VLM-based semantic-hazard (water) experiments,
+paired with the [yopo-vlm-sys2](../yopo-vlm-sys2) System-2 repo:
+
+- **`Assets/Scripts/PuddleRandomizer.cs`**: random puddle placement each run
+  (radius-shrink retry, stable 6/6 placement; logs puddle coordinates to Console
+  for use as ground truth).
+- **`Assets/Prefabs/WaterTemp.prefab` + `Assets/Materials/VLMWater.mat`**: opaque
+  bright-blue water material (URP/Lit) replacing the transparent water, so the
+  VLM can reliably see water from the vehicle camera.
+- **RGB camera FOV 30° → 70°** (`RGBCamera_ros.prefab`): wider view for semantic
+  perception.
+- **`Assets/Editor/AutoPlay.cs`**: `-autoPlay` CLI flag — forces the
+  StandaloneLinux64 build target and enters Play mode automatically.
+- **`ROSConnectionPrefab`**: `m_ConnectOnStart = 1` (auto-connect to ROS-TCP-Endpoint).
+- **`TreeDensitySetter`**: switches trees only, no longer regenerates the terrain.
+
+### Assets not tracked (must be restored manually)
+
+| Asset | Why excluded | How to restore |
+|---|---|---|
+| `Assets/PinwheelStudio/` (Vista) | Paid Asset Store license | Re-import from your Unity Asset Store purchases |
+| `Assets/ThirdParty/TerrainDemoScene_URP/` | ~3.9 GB demo terrain | Copy from the original project / upstream bundle |
+| `TrainingData/`, `TestingData/` | Generated datasets | Regenerate with DataGenerationScene |
+
+Without Vista, scenes will show missing-script warnings on `VistaManager` — terrain
+still loads from the committed `Assets/TerrainData/*.asset`.
+
+Upstream: https://github.com/TJU-Aerial-Robotics/YOPO-Sim
