@@ -188,4 +188,6 @@ paired with the [yopo-vlm-sys2](https://github.com/PerryNotFound/yopo-vlm-sys2) 
 Without Vista, scenes will show missing-script warnings on `VistaManager` — terrain
 still loads from the committed `Assets/TerrainData/*.asset`.
 
+详细使用说明（场景、随机化、水坑、相机配置）见 [docs/YOPO-Sim使用指南.md](docs/YOPO-Sim使用指南.md)。
+
 Upstream: https://github.com/TJU-Aerial-Robotics/YOPO-Sim
